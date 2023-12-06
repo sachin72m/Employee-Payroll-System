@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="ISO-8859-1">
+	<title>Payroll System</title>
+	<style>
+		body {
+			margin: 0;
+			font-family: Arial, sans-serif;
+			background-color: mistyrose;
+		}
+
+		header {
+			background-color: orangered;
+			color: white;
+			padding: 10px;
+			text-align: center;
+		}
+
+		main {
+			padding: 20px;
+			
+		}
+
+		footer {
+			background-color: coral;
+			color: black;
+			padding: 10px;
+			text-align: center;
+			position: fixed;
+			bottom: 0;
+			width: 100%;
+		}
+
+		.add-button {
+			background-color: lightpink;
+			color: black;
+			padding: 10px 20px;
+			text-align: center;
+			text-decoration: none;
+			display: inline-block;
+			font-size: 16px;
+			margin: 4px 2px;
+			cursor: pointer;
+			border-radius: 5px;
+			margin-right: 6%;
+            }
+            
+ .add-button,
+.show-users-button,
+.payroll-button,
+.pay-slip {
+    transition: transform 0.3s;
+    /* Add transition effect for smooth change */
+}
+
+.add-button:hover,
+.show-users-button:hover,
+.payroll-button:hover, 
+.pay-slip:hover {
+    transform: scale(1.2);
+    background-color: deeppink
+    /* Increase the button size on hover */
+}
+
+
+		#dialog-overlay {
+			display: none;
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background-color: rgba(0, 0, 0, 0.5);
+			justify-content: center;
+			align-items: center;
+			z-index: 9999;
+		}
+
+		#dialog-box {
+			display: none;
+			background-color: #fff;
+			padding: 40px;
+			border-radius: 5px;
+			box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+			width: 70%;
+			max-width: 600px;
+			max-height: 80vh;
+			overflow-y: auto;
+			display: grid;
+			grid-template-columns: repeat(2, 1fr);
+			/* Split into two columns */
+			gap: 20px;
+			/* Gap between columns */
+		}
+
+		.form-section {
+			grid-column: span 1;
+			/* Span the entire width of a column */
+		}
+
+		.form-group {
+			margin-bottom: 20px;
+		}
+
+		.form-group label {
+			display: block;
+			margin-bottom: 5px;
+			font-weight: normal;
+		}
+
+		.form-group input,
+		.form-group textarea {
+			width: 100%;
+			padding: 10px;
+			border-radius: 5px;
+			border: 1px solid #ccc;
+			font-size: 16px;
+			box-sizing: border-box;
+		}
+
+		.form-group input[type="submit"] {
+			background-color: lightseagreen;
+			color: white;
+			cursor: pointer;
+			font-size: 16px;
+		}
+
+		/* Style for the address textarea */
+		#address {
+			height: 100px;
+			/* Fixed height for the address field */
+			resize: none;
+			/* Allow vertical resizing ***/
+		}
+		
+		
+		.show-users-button {
+         /* Add some space between buttons */
+            background-color: lightpink;
+			color: black;
+			padding: 10px 20px;
+			text-align: center;
+			text-decoration: none;
+			display: inline-block;
+			font-size: 16px;
+			margin: 4px 2px;
+			cursor: pointer;
+			border-radius: 5px;
+			margin-left: 50px;
+			margin-right: 6%;    
+    }
+    
+    
+    .payroll-button{
+         /* Add some space between buttons */
+            background-color: lightpink;
+			color: black;
+			padding: 10px 20px;
+			text-align: center;
+			text-decoration: none;
+			display: inline-block;
+			font-size: 16px;
+			margin: 4px 2px;
+			cursor: pointer;
+			border-radius: 5px;
+			margin-left: 50px;
+			margin-right: 6%;    
+       }
+       
+       
+       /* FOR PAYROLL STYLING... */
+/* CSS */
+#dialog-overlay2 {
+			display: none;
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background-color: rgba(0, 0, 0, 0.5);
+			justify-content: center;
+			align-items: center;
+			z-index: 9999;
+		}
+		
+#dialog-box2 {
+			display: none;
+			background-color: #fff;
+			padding: 40px;
+			border-radius: 5px;
+			box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+			width: 70%;
+			max-width: 600px;
+			max-height: 80vh;
+			overflow-y: auto;
+			display: grid;
+			grid-template-columns: repeat(2, 1fr);
+			/* Split into two columns */
+			gap: 20px;
+			/* Gap between columns */
+		}
+		
+		.inputRow input,
+		.inputRow textarea {
+			width: 100%;
+			padding: 10px;
+			border-radius: 5px;
+			border: 1px solid #ccc;
+			font-size: 16px;
+			box-sizing: border-box;
+		}
+		
+.inputRow2 input[type="submit"],
+.inputRow2 input[type="button"] {
+			background-color: lightseagreen;
+			color: white;
+			cursor: pointer;
+			font-size: 16px;
+			margin-top: 20px;
+		}
+		.inputRow label {
+			display: block;
+			margin-bottom: 5px;
+			font-weight: normal;
+		}
+		.form-section2 {
+			grid-column: span 1;
+			/* Span the entire width of a column */
+		}
+
+		.inputRow {
+			margin-bottom: 20px;
+		}
+		/* CSS to center-align fieldset headings */
+.centered-fieldset {
+    text-align: center;
+    margin: 0 auto;
+    width: fit-content;
+}
+
+.inputRow2 {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px; /* Adjust margin as needed */
+}
+
+.inputRow2 input[type="submit"],
+.inputRow2 input[type="button"] {
+    /* Optional button styling */
+    padding: 10px 16px;
+    margin-left: 36%;
+    margin-right: 30%;   
+    margin-top: 0px;
+    /* Adjust padding as needed */
+}
+
+
+/* FOR AFTER CLICKING ON SEARCH EMPLOYEE BUTTON ACTION  */
+/* Style for the dialog box */
+#dialog-overlay3 {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+#dialog-box3 {
+    background-color: blueviolet;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#employeeID2 {
+    width: 250px; /* Adjust the width as needed */
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+/* Style for the buttons */
+#dialog-box3 button {
+    padding: 12px 20px; /* Adjust padding for larger buttons */
+    font-size: 13px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer; 
+}
+
+/* Pay Slip Styling */
+
+.pay-slip{
+         /* Add some space between buttons */
+            background-color: lightpink;
+			color: black;
+			padding: 10px 20px;
+			text-align: center;
+			text-decoration: none;
+			display: inline-block;
+			font-size: 16px;
+			margin: 4px 2px;
+			cursor: pointer;
+			border-radius: 5px;
+			margin-left: 50px;
+			margin-right: 10px;    
+       }
+       
+       .container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+}
+	</style>
+</head>
+
+<body>
+	<header>
+		<h1>Employee Payroll System</h1>
+	</header>
+
+
+	<main class="container">
+		<!--- <p>Main content goes here.</p> -->
+		<button class="add-button" id="open-dialog-button"><b>Add New Employee</b></button>
+		<button class="show-users-button" onclick="location.href='EmployeeList.jsp'"><b>Show Employees Information</b></button>
+        <button class="payroll-button" id="payrollButton"><b>Payroll Information</b></button>
+        <form action="GeneratePaySlipServlet" method="get">
+        <button class="pay-slip" id="pay-slipButton"><b>Generate Pay Slip</b></button>
+        </form>
+	</main>
+
+	<div id="dialog-overlay">
+		<div id="dialog-box">
+			<div class="form-section">
+				<h2><center>New Employee Details</center></h2>
+				<form id="employee-details-form" action="DashboardServlet" method="post">
+					
+					<div class="form-group">
+						<label for="employeeId">Employee ID:</label>
+						<input type="text" id="employeeId" name="employeeId" required>
+					</div>
+					
+					<div class="form-group">
+						<label for="firstName">First Name:</label>
+						<input type="text" id="firstName" name="firstName" required>
+					</div>
+
+					<div class="form-group">
+						<label for="lastName">Last Name:</label>
+						<input type="text" id="lastName" name="lastName" required>
+					</div>
+					<div class="form-group">
+						<label for="email">Email ID:</label>
+						<input type="email" id="email" name="emailID" required>
+					</div>
+
+
+					<div class="form-group">
+						<label for="dob">DOB:</label>
+						<input type="date" id="dob" name="dob" required>
+					</div>
+
+					<div class="form-group">
+						<label for="address">Address:</label>
+						<textarea id="address" name="address" required></textarea>
+					</div>
+
+					<div class="form-group">
+						<label for="city">City:</label>
+						<input type="text" id="city" name="city" required>
+					</div>
+
+					<div class="form-group">
+						<label for="contactInfo">Contact Info:</label>
+						<input type="text" id="contactInfo" name="contactInfo" required>
+					</div>
+
+					<div class="form-group">
+						<label for="gender">Gender:</label>
+						<select id="gender" name="gender" required>
+							<option value="male">Male</option>
+							<option value="female">Female</option>
+							<option value="other">Other</option>
+						</select>
+					</div>
+
+					<h2><center>Company Details</center></h2>
+					<form id="company-details-form">
+						<div class="form-group">
+						<label for="dateOfJoining">Date of Joining:</label>
+						<input type="date" id="dateOfJoining" name="dateOfJoining" required>
+					    </div>
+					    
+						<div class="form-group">
+							<label for="companyName">Company Name:</label>
+							<input type="text" id="companyName" name="companyName" required>
+						</div>
+
+						<div class="form-group">
+							<label for="salary">Salary:</label>
+							<input type="number" id="salary" name="salary" required>
+						</div>
+
+						<div class="form-group">
+							<label for="companyLocation">Company Location:</label>
+							<input type="text" id="companyLocation" name="companyLocation" required>
+						</div>
+						<div class="form-group">
+							<input type="submit" value="Submit">
+						</div>
+			</div>
+		</div>
+		</form>
+	</div>
+	
+	
+	
+	
+	
+<!-- FOR PAYROLL INFO -->
+<form id="payroll-form" action="PayrollSubmissionServlet" method="post">
+  <div id="dialog-overlay2">
+    <div id="dialog-box2">
+      <div class="form-section2">
+        <!-- Employee Details -->
+        <label class="centered-fieldset"><h3>Employee Details</h3></label>
+        <div class="inputRow">
+          <label for="employeeID">Employee ID:</label>
+          <input type="text" id="employeeID" name="employeeID">
+        </div>
+        <div class="inputRow">
+          <label for="salaryType">Salary Type:</label>
+          <select id="salaryType" name="salaryType">
+            <option value="select">Select Type</option>
+            <option value="weekly">Weekly Salary</option>
+            <option value="monthly">Monthly Salary</option>
+            <option value="yearly">Yearly Salary</option>
+          </select>
+        </div>
+        <div class="inputRow">
+			<label for="salary">Salary:</label>
+			<input type="number" id="salary" name="salary">
+		</div>
+        <div class="inputRow">
+          <label for="firstName2">First Name:</label>
+          <input type="text" id="firstName2" name="firstName2">
+        </div>
+        <div class="inputRow">
+          <label for="lastName2">Last Name:</label>
+          <input type="text" id="lastName2" name="lastName2">
+        </div>
+
+        <!-- Search Employee Dialog Box -->
+        <div class="inputRow2">
+          <input type="button" onclick="openDialog()" value="Search Employee">
+        </div>
+        <div id="dialog-overlay3" style="display: none;">
+          <div id="dialog-box3">
+            <h2>Search Employee</h2>
+            <form>
+              <input type="text" id="employeeID2" name="employeeID2" placeholder="Enter Employee ID">
+              <p>
+              <button type="button" onclick="searchEmployee()">OK</button>
+              <button type="button" onclick="closeDialog()">Cancel</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Salary Allowances -->
+        <label class="centered-fieldset"><h3>Salary Allowances</h3></label>
+        <div class="inputRow">
+          <label for="travelAllowances">Travel Allowances:</label>
+          <input type="text" id="travelAllowances" name="travelAllowances">
+        </div>
+        <div class="inputRow">
+          <label for="foodAllowances">Food Allowances:</label>
+          <input type="text" id="foodAllowances" name="foodAllowances">
+        </div>
+        <div class="inputRow">
+          <label for="performanceBonus">Performance Bonus:</label>
+          <input type="text" id="performanceBonus" name="performanceBonus">
+        </div>
+
+        <!-- Salary Deductions -->
+        <label class="centered-fieldset"><h3>Salary Deductions</h3></label>
+        <div class="inputRow">
+          <label for="epf">EPF( In %)</label>
+          <input type="text" id="epf" name="epf">
+        </div>
+        <div class="inputRow">
+          <label for="tax">TAX( In %)</label>
+          <input type="text" id="tax" name="tax">
+        </div>
+        <div class="inputRow2">
+          <input type="submit" value="Submit">
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+   
+
+
+
+
+
+
+
+
+
+     <!-- FOR ADD NEW EMPLOYEE   -->
+	<script>
+		// JavaScript to open and close dialog box
+		document.getElementById('open-dialog-button').addEventListener('click', function () {
+			document.getElementById('dialog-overlay').style.display = 'flex';
+			document.getElementById('dialog-box').style.display = 'block';
+		});
+
+		// Close dialog box when clicking outside the box
+		document.getElementById('dialog-overlay').addEventListener('click', function (event) {
+			if (event.target === this) {
+				document.getElementById('dialog-overlay').style.display = 'none';
+			}
+		});
+		
+		
+		
+		
+		
+		
+		//For Payroll Information....
+		
+		// JavaScript to open and close dialog box
+		document.getElementById('payrollButton').addEventListener('click', function () {
+			document.getElementById('dialog-overlay2').style.display = 'flex';
+			document.getElementById('dialog-box2').style.display = 'block';
+		});
+
+		// Close dialog box when clicking outside the box
+		document.getElementById('dialog-overlay2').addEventListener('click', function (event) {
+			if (event.target === this) {
+				document.getElementById('dialog-overlay2').style.display = 'none';
+			}
+		});
+		
+		
+		
+		
+		
+		
+	     /* SEARCH EMPLOYEE BUTTON ACTION*/
+	     
+	  function openDialog() {
+    document.getElementById('dialog-overlay3').style.display = 'block';
+}
+
+function closeDialog() {
+    document.getElementById('dialog-overlay3').style.display = 'none';
+}
+
+
+
+
+//Checking employeeID and fetching related details from the DB and give return to
+// Javascript or client side. 
+         function searchEmployee() {
+            var employeeID = document.getElementById('employeeID2').value.trim();
+
+            if (employeeID !== '') {
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', 'SearchEmployeeServlet', true);
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            var response = xhr.responseText;
+                            if (response === 'Valid') {
+                                // If the ID is valid, fetch employee details
+                                fetchEmployeeDetails(employeeID);
+                            } else {
+                                // Display a message indicating invalid ID
+                                alert('ID Not Matched');
+                            }
+                        } else {
+                            // Handle error scenario
+                            alert('Error fetching data');
+                        }
+                    }
+                };
+                xhr.send('employeeID2=' + employeeID);
+            } else {
+                // Prompt user to enter an employee ID
+                alert('Please enter an Employee ID'); 
+            };
+        }
+        
+        // Function to update the Payroll Information dialog fields with received data
+/* function updatePayrollDialog(data) {
+	console.log('Received data:', data);
+    document.getElementById('firstName2').value = data.firstName2;
+    document.getElementById('lastName2').value = data.lastName2;
+    // Update other fields as needed
+} */
+
+        function fetchEmployeeDetails(employeeID) {
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'EmployeeDetailsServlet', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        var data = JSON.parse(xhr.responseText);
+                         console.log(data);
+                        document.getElementById('firstName2').value = data.firstName;
+                        document.getElementById('lastName2').value = data.lastName;
+                       
+                      // updatePayrollDialog(data);
+                        // Set other fields accordingly
+                    } else {
+                  console.error('Error fetching employee details:', xhr.status);
+                alert('Error fetching employee details');
+                    }
+                }
+            };
+            xhr.send('employeeID2=' + employeeID);
+        }
+		
+		
+		
+	</script>
+
+	<footer>
+		<p>Home Page</p>
+	</footer>
+</body>
+
+</html>
